@@ -21,3 +21,5 @@ alignment = ["Lawful Good", "Neutral Good", "Chaotic Good", "Lawful Neutral", "T
 
 #List containing the possible values for the "size" column in the baseStats dataframe.
 size = ["Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan"]
+
+
