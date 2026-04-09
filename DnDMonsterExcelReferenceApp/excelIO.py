@@ -1,6 +1,9 @@
 import pandas as pd;
+from openpyxl import wb;
 
-with pd.ExcelFile("..\MonsterManualExcel\D&D 5e Monster Manual by Ability Scores, Saves, Damage and Condition immunities.xlsx") as manual:
+excelFile = "..\MonsterManualExcel\D&D 5e Monster Manual by Ability Scores, Saves, Damage and Condition immunities.xlsx"
+
+with pd.ExcelFile(excelFile) as manual:
     baseStats = pd.read_excel(manual, sheet_name = 0, header = 0, usecols = "A:G")
 
     print("First 15 Monsters:\n ")
@@ -35,3 +38,12 @@ with pd.ExcelFile("..\MonsterManualExcel\D&D 5e Monster Manual by Ability Scores
     print("\n")
 
     #NOTES: Certain values in the excel might have the wrong data types. For example, in CR, some 1/4 is actually datetime for 2018/1/4 
+
+    #Return a full dictionary of all the sheets
+    fullExcelDictionary = pd.read_excel(manual, sheet_name = None, header = 0, usecols = None)
+
+    for key in fullExcelDictionary:
+        print(key)
+    print(fullExcelDictionary["Monsters"])
+    print(fullExcelDictionary["Monsters by Condition Immunitie"])
+
