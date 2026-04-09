@@ -21,15 +21,15 @@ with pd.ExcelFile(excelFile) as manual:
     abilityScores = pd.read_excel(manual, sheet_name = 1, header = 0, usecols = "A, H:M")
     abilityScores.index.name = "Index"
 
-    #Read into a dataframe the 3nd sheet of the excel file, which contains all monsters' damage immunities.
+    #Read into a dataframe the 3rd sheet of the excel file, which contains all monsters' damage immunities.
     damageImmunities = pd.read_excel(manual, sheet_name = 2, header = 0, usecols = "A, H:T")
     damageImmunities.index.name = "Index"
 
-    #Read into a dataframe the 4nd sheet of the excel file, which contains all monsters' saving throw modifiers.
+    #Read into a dataframe the 4th sheet of the excel file, which contains all monsters' saving throw modifiers.
     savingThrows = pd.read_excel(manual, sheet_name = 3, header = 0, usecols = "A, H:M")
     savingThrows.index.name = "Index"
 
-    #Read into a dataframe the 4nd sheet of the excel file, which contains all monsters' saving throw modifiers.
+    #Read into a dataframe the 5th sheet of the excel file, which contains all monsters'condition immunities.
     conditionImmunities = pd.read_excel(manual, sheet_name = 4, header = 0, usecols = "A, H:T")
     conditionImmunities.index.name = "Index"
 
@@ -45,12 +45,16 @@ Main Menu:
       2. Search for a monster by name
       3. View Full Statistic Tables
       4. Exit the program""")
-    
+
+#pd.options.display.max_columns = None
+#pd.options.display.max_rows = None
+#pd.set_option('expand_frame_repr', False)
+#print(pd.get_option("display.width"))
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
 This program is designed to assist you with searching through
 the DnD 5e Monster Manual excel file, which contains the stats 
-of 690 monsters.\n
+of 691 monsters.\n
 ------------------------------------------------------------\n
 Main Menu:
       1. Retrieve the base stats of a random monster
@@ -116,22 +120,26 @@ while inputChoice != "4":
 
         if tableChoice == "1":
             print("Monsters by Base Stats:\n")
-            print(baseStats.to_string())
+            print(baseStats.to_string(justify = "center"))
         elif tableChoice == "2":
             print("Monsters by Ability Scores:\n")
-            print(abilityScores.to_string())
+            print(abilityScores.to_string(justify = "center"))
         elif tableChoice == "3":
             print("Monsters by Saving Throws:\n")
-            print(savingThrows.to_string())
+            print(savingThrows.to_string(justify = "center"))
         elif tableChoice == "4":
             print("Monsters by Condition Immunities:\n")
-            print(conditionImmunities.to_string())
+            print(conditionImmunities.to_string(justify = "center"))
+            print("""\n
+                  ------------------------------------------------------------------------------------
+                  NOTE: If the table is too big, zoom out by clicking [CTRL] and [-] at the same time.
+                  ------------------------------------------------------------------------------------""")
         elif tableChoice == "5":
             print("Monsters by Damage Immunities:\n")
-            print(damageImmunities.to_string())
+            print(damageImmunities.to_string(justify = "center"))
         elif tableChoice == "6":
             print("Monsters by Biomes:\n")
-            print(biomeStats.to_string())
+            print(biomeStats.to_string(justify = "center"))
         elif tableChoice == "7":
             mainMenuOptions()
         else:
