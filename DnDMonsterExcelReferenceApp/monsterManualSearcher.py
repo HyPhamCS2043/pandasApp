@@ -21,12 +21,30 @@ with pd.ExcelFile(excelFile) as manual:
     abilityScores = pd.read_excel(manual, sheet_name = 1, header = 0, usecols = "A, H:M")
     abilityScores.index.name = "Index"
 
+    #Read into a dataframe the 3nd sheet of the excel file, which contains all monsters' damage immunities.
+    damageImmunities = pd.read_excel(manual, sheet_name = 2, header = 0, usecols = "A, H:T")
+    damageImmunities.index.name = "Index"
 
+    #Read into a dataframe the 4nd sheet of the excel file, which contains all monsters' saving throw modifiers.
+    savingThrows = pd.read_excel(manual, sheet_name = 3, header = 0, usecols = "A, H:M")
+    savingThrows.index.name = "Index"
+
+    #Read into a dataframe the 4nd sheet of the excel file, which contains all monsters' saving throw modifiers.
+    conditionImmunities = pd.read_excel(manual, sheet_name = 4, header = 0, usecols = "A, H:T")
+    conditionImmunities.index.name = "Index"
 
 def randomMonster(df):
     #Returns a random row from the baseStats dataframe.
     return df.sample(n = 1)
 
+def mainMenuOptions():
+    #print out the main menu
+    print("""------------------------------------------------------------\n
+Main Menu:
+      1. Retrieve the base stats of a random monster
+      2. Search for a monster by name
+      3. View Full Statistic Tables
+      4. Exit the program""")
     
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
@@ -41,11 +59,12 @@ Main Menu:
       4. Exit the program
 What would you like to do? (Enter the number corresponding to your choice):""")
 
+#Main Menu I/O loop
 inputChoice = input()
 
 while inputChoice != "4":
     if inputChoice == "1":
-        print("Here's a fun creature for you!\n")
+        print("\nHere's a fun creature for you!\n")
         print(randomMonster(baseStats).to_string())
 
     elif inputChoice == "2":
@@ -91,6 +110,7 @@ while inputChoice != "4":
         4. Monsters by Condition Immunities
         5. Monsters by Damage Immunities
         6. Monsters by Biomes
+        7. Back to Main Menu
         (Enter the number corresponding to the table you want to view)\n""")
         tableChoice = input()
 
@@ -100,9 +120,26 @@ while inputChoice != "4":
         elif tableChoice == "2":
             print("Monsters by Ability Scores:\n")
             print(abilityScores.to_string())
+        elif tableChoice == "3":
+            print("Monsters by Saving Throws:\n")
+            print(savingThrows.to_string())
+        elif tableChoice == "4":
+            print("Monsters by Condition Immunities:\n")
+            print(conditionImmunities.to_string())
+        elif tableChoice == "5":
+            print("Monsters by Damage Immunities:\n")
+            print(damageImmunities.to_string())
+        elif tableChoice == "6":
+            print("Monsters by Biomes:\n")
+            print(biomeStats.to_string())
+        elif tableChoice == "7":
+            mainMenuOptions()
+        else:
+            print("Please enter a number from 1 to 7.")
     else:
         print("Invalid input, please enter a number from 1 to 4.")
 
+    #mainMenuOptions()
     print("\nWhat would you like to do? (Enter the number corresponding to your choice):")
     inputChoice = input()
 
