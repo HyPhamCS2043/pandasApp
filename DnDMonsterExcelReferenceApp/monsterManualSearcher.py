@@ -20,7 +20,7 @@ with pd.ExcelFile(excelFile) as manual:
     baseStats.index.name = "Index" 
 
     #Read into a dataframe the 1st two columns of the first sheet, along with some of the later columns that indicates the monsters' habitats.
-    habitatStats = pd.read_excel(manual, sheet_name = 0, header = 0, usecols = "A, N:X")
+    habitatStats = pd.read_excel(manual, sheet_name = 0, header = 0, usecols = "A, N:X").fillna("Unknown")
     habitatStats.index.name = "Index"
 
     #Read into a dataframe the 2nd sheet of the excel file, which contains all monsters' ability scores.
@@ -28,7 +28,7 @@ with pd.ExcelFile(excelFile) as manual:
     abilityScores.index.name = "Index"
 
     #Read into a dataframe the 3rd sheet of the excel file, which contains all monsters' damage immunities.
-    damageImmunities = pd.read_excel(manual, sheet_name = 2, header = 0, usecols = "A, H:T")
+    damageImmunities = pd.read_excel(manual, sheet_name = 2, header = 0, usecols = "A, H:T").fillna("None")
     damageImmunities.index.name = "Index"
 
     #Read into a dataframe the 4th sheet of the excel file, which contains all monsters' saving throw modifiers.
@@ -36,7 +36,7 @@ with pd.ExcelFile(excelFile) as manual:
     savingThrows.index.name = "Index"
 
     #Read into a dataframe the 5th sheet of the excel file, which contains all monsters'condition immunities.
-    conditionImmunities = pd.read_excel(manual, sheet_name = 4, header = 0, usecols = "A, H:T").fillna(0)
+    conditionImmunities = pd.read_excel(manual, sheet_name = 4, header = 0, usecols = "A, H:T").fillna("None")
     conditionImmunities.index.name = "Index"
 
 def randomMonster(df):
@@ -134,6 +134,82 @@ def viewSpecificStatsMenu(name):
     What would you like to do? (Enter the number corresponding to your choice):""")
         choice = input()
 
+def filterBaseStatsMenu(df):
+    print("""\n\t\tFilter the table using the options below:
+                1. Types
+                2. Alignment
+                3. Size
+                4. AC
+                5. HP
+                6. Return to Stats Table Menu
+            (Enter the number corresponding to the filter option)\n""")
+    
+    choice = input()
+    print("\n------------------------------------------------------------")
+    while choice != "6":
+        match choice:
+            case "1":
+                print("\nFiltering by Types\n")
+                print("Here are all the available creature's Types:\n")
+                print("""
+                        1. Aberration  5. Dragon      9. Fiend (Demon)    13. Monstrosity
+                        2. Beast       6. Elemental   10. Fiend (Devil)   14. Ooze
+                        3. Celestial   7. Fey         11. Giant           15. Plant
+                        4. Construct   8. Fiend       12. Humanoid        16. Undead
+                    (Enter 1 or more number corresponding to the Types, separated by a comma ',')""")
+                
+                types = input()
+                typesToFilter = types.split(",")
+                typeDF = pd.DataFrame({
+                    "Types": [
+                        "Aberration",
+                        "Beast",
+                        "Celestial",
+                        "Construct",
+                        "Dragon",
+                        "Elemental",
+                        "Fey",
+                        "Fiend",
+                        "Fiend (Demon)",
+                        "Fiend (Devil)",
+                        "Giant",
+                        "Humanoid",
+                        "Monstrosity",
+                        "Ooze",
+                        "Plant",
+                        "Undead",],
+                }, index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+                
+                filterList = []
+                typeSearched = []
+
+                for i in typesToFilter:
+                    typeIndex = int(i.strip())
+                    typeName = typeDF.loc[typeIndex]["Types"]
+
+                    typeSearched.append(typeName)
+
+                    filterPhrase = baseStats["Type"] == typeName
+                    filterList.append(filterPhrase)
+                
+                for f in filterList:
+                    print("--------------------------------------\n")
+                    returnedDF = baseStats[f]
+                    print(returnedDF.to_string(justify = "center"))
+
+            case 6:
+                break
+    
+        print("""\nFilter the Base Stats table using the options below:
+                1. Types
+                2. Alignment
+                3. Size
+                4. AC
+                5. HP
+                6. Return to Stats Table Menu
+          (Enter the number corresponding to the filter option)\n""")
+        choice = input()
+
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
 This program is designed to assist you with searching through
@@ -215,7 +291,7 @@ while inputChoice != "4":
             print("Invalid input, please enter 1 or 2.")
 
     elif inputChoice == "3":
-        print("Below are all the stats tables:\n")
+        print("Stat Tables Menu:\n")
         print("""
         1. Monsters by Base Stats
         2. Monsters by Ability Scores
@@ -231,6 +307,9 @@ while inputChoice != "4":
             if tableChoice == "1":
                 print("Monsters by Base Stats:\n")
                 print(baseStats.to_string(justify = "center"))
+
+                filterBaseStatsMenu(baseStats)
+
             elif tableChoice == "2":
                 print("Monsters by Ability Scores:\n")
                 print(abilityScores.to_string(justify = "center"))
