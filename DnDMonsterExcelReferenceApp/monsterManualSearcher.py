@@ -750,12 +750,12 @@ def filterConditionImmuneMenu():
         filterList.append(conditionImmunities[conditionName] == 1)
 
     print(", ".join(condNameSelected))
+    print("\n")
 
     initialDF = conditionImmunities
     filteredDFList = []
     finalFilteredDF = None
 
-    
     #If there is more than 1 condition filter, apply them cumulatively through reduce()
     if len(filterList) > 1:
         
@@ -770,10 +770,8 @@ def filterConditionImmuneMenu():
         #Merging all the different dataframes generated from the condition list above
         finalFilteredDF = reduce(lambda left, right: pd.merge(left, right, how = "inner", on = "Name"), filteredDFList)
         
-
-
     else:
-        finalFilteredDF = initialDF[filterList[0]]
+        finalFilteredDF = initialDF[filterList[0]][["Name", condNameSelected[0]]]
     
     print(finalFilteredDF.to_string())
 
@@ -781,16 +779,93 @@ def filterDamageImmuneMenu():
     print("=====================================")
     print("Condition Immunity Filter Menu")
     print("""\n\t\tHere are all Damage Types:
-                1. Blinded              8. Petrified                  
-                2. Charmed              9. Poisoned        
-                3. Deafened             10. Prone       
-                4. Exhaustion           11. Restrained
-                5. Frightened           12. Stunned
-                6. Grappled             13. Unconscious
-                7. Paralyzed             
+                1. Bludgeoning      8. Lightning                  
+                2. Piercing         9. Necrotic        
+                3. Slashing         10. Poison       
+                4. Acid             11. Psychic
+                5. Cold             12. Radiant
+                6. Fire             13. Thunder
+                7. Force            
+       
             (Enter one or multiple numbers (between 1 and 13) corresponding to 
             the Conditions that the creature is immune to, separated by a comma ',')\n""")
+
+def filterHabitatMenu():
+    print("=====================================")
+    print("Habitat Filter Menu")
+    print("""\n\t\tHere are all Habitats:
+                1. Arctic       7. Mountain                   
+                2. Coast        8. Swamp       
+                3. Desert       9. Underdark          
+                4. Forest       10. Underwater       
+                5. Grassland    11. Urban         
+                6. Hill                        
+            (Enter one or multiple numbers (between 1 and 13) corresponding to 
+            the Habitats that the creature is in, separated by a comma ',')\n""")
     
+    habitats = input()
+    habitatsList = habitats.split(",")
+    habitatsDF = pd.DataFrame({
+        "Habitat" : [
+            "Arctic",
+            "Coast",
+            "Desert",
+            "Forest",
+            "Grassland",
+            "Hill",
+            "Mountain",
+            "Swamp",
+            "Underdark",
+            "Underwater",
+            "Urban",
+        ],
+    }, index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    print("\n------------------------------------------------------------")
+
+    print("Here are all the creatures that can be found in: \n")
+
+    habitatsSelected = []
+    filterList = []
+    for c in habitatsList:
+        habitatsIndex = int(c.strip())
+
+        if habitatsIndex in habitatsDF.index:
+            habitatName = habitatsDF.loc[habitatsIndex]["Habitat"]
+            habitatsSelected.append(habitatName)
+            
+        else:
+            print("Sorry, " + c + " is not part of the choices offered.")
+            break
+
+        filterList.append(habitatStats[habitatName] == "YES")
+
+    print(", ".join(habitatsSelected))
+    print("\n")
+
+    initialDF = habitatStats
+    filteredDFList = []
+    finalFilteredDF = None
+    
+    #If there is more than 1 condition filter, apply them cumulatively through reduce()
+    if len(filterList) > 1:
+        
+        k = 0
+        for i in filterList:
+            #Select only the column that the user inputs along with the name column
+            #Applying the filter conditions (stored in filterList) to the intial dataframe iteratively
+            filtered = initialDF[i][["Name", habitatsSelected[k]]]
+            filteredDFList.append(filtered)
+            k += 1
+        
+        #Merging all the different dataframes generated from the condition list above
+        finalFilteredDF = reduce(lambda left, right: pd.merge(left, right, how = "inner", on = "Name"), filteredDFList)
+
+    else:
+        finalFilteredDF = initialDF[filterList[0]][["Name", habitatsSelected[0]]]
+    
+    print(finalFilteredDF.to_string())  
+
+#------------------------------------------------------------------------------------------------------------------------------------------------  
 #START PAGE
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
@@ -916,6 +991,9 @@ while inputChoice != "4":
             elif tableChoice == "6":
                 print("Creatures by Habitats:\n")
                 print(habitatStats.to_string(justify = "center"))
+
+                filterHabitatMenu()
+
             else:
                 print("Please enter a number from 1 to 7.")
 
