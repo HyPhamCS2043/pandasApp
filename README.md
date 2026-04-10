@@ -69,3 +69,4 @@ The following screen should appears:
 
 The entire program can be used with keyboard inputs alone. Have fun exploring the different menu branches! The majority of inputs required are integers, or in some cases, multiple integers separated by a comma.
 
+![Comma-separated Input](https://github.com/HyPhamCS2043/pandasApp/blob/main/DnDReferencer3.jpg)
