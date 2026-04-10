@@ -773,7 +773,10 @@ def filterConditionImmuneMenu():
     else:
         finalFilteredDF = initialDF[filterList[0]][["Name", condNameSelected[0]]]
     
-    print(finalFilteredDF.to_string())
+    if finalFilteredDF.empty:
+        print("Sorry, no creatures satisfy your filter conditions")
+    else:
+        print(finalFilteredDF.to_string())
 
 def filterDamageImmuneMenu():
     print("=====================================")
@@ -876,7 +879,10 @@ def filterDamageImmuneMenu():
     else:
         finalFilteredDF = initialDF[filterList[0]][["Name", damageTypeSelected[0]]]
     
-    print(finalFilteredDF.to_string())  
+    if finalFilteredDF.empty:
+        print("Sorry, no creatures satisfy your filter conditions")
+    else:
+        print(finalFilteredDF.to_string())  
 
 def filterHabitatMenu():
     print("=====================================")
@@ -951,7 +957,10 @@ def filterHabitatMenu():
     else:
         finalFilteredDF = initialDF[filterList[0]][["Name", habitatsSelected[0]]]
     
-    print(finalFilteredDF.to_string())  
+    if finalFilteredDF.empty:
+        print("Sorry, no creatures satisfy your filter conditions")
+    else:
+        print(finalFilteredDF.to_string())  
 
 #------------------------------------------------------------------------------------------------------------------------------------------------  
 #START PAGE
