@@ -60,6 +60,8 @@ The interface below should appear in your terminal:
 To navigate between the menu, respond to the command prompt by typing the number that corresponds to the menu option that you would like to select, then pressing **Enter**.  
 For example, typing "1" then pressing **Enter** will bring up:
 
-![Random Creature Menu Interface](image-url)
+![Random Creature Menu Interface](https://github.com/HyPhamCS2043/pandasApp/blob/main/DnDReferencer1.jpg)
+
+To learn more about the creature, for example, type 
 
 
