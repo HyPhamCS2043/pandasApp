@@ -2,8 +2,8 @@
 import pandas as pd;
 from functools import reduce
 
-#pd.options.display.max_columns = None
-#pd.options.display.max_rows = None
+pd.options.display.max_columns = None
+pd.options.display.max_rows = None
 #pd.set_option('expand_frame_repr', False)
 #print(pd.get_option("display.width"))
 
@@ -134,19 +134,161 @@ def viewSpecificStatsMenu(name):
     What would you like to do? (Enter the number corresponding to your choice):""")
         choice = input()
 
+def numericFilterMenu(filterName, colName):
+    print("Select filter option from the list below:\n")
+    print("""
+                    1. Equals (=) 
+                    2. Not Equal (!=)
+                    3. Greater Than (>)
+                    4. Greater Than or Equal to (>=)
+                    5. Less Than(<)
+                    6. Less Than or Equal to (<=)
+                    7. Between
+                    8. Return to Base Stats Filter Menu
+                    (Enter a number between 1 and 7, corresponding to your choice of filter)\n""")
+                
+    filterChoice = input()
+    while filterChoice != "8":
+        match filterChoice:
+            case "1":
+                print("\n-------------------------------------------\n")
+                print("Show entries where " + filterName + " is equal to: ")
+                numToFind = float(input())
+
+                rowsReturned = baseStats[baseStats[colName] == numToFind]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "2":
+                print("\n-------------------------------------------\n")
+                print("Show entries where " + filterName + " is NOT equal to: ")
+                numToFind = float(input())
+
+                rowsReturned = baseStats[baseStats[colName] != numToFind]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    rowsReturned = rowsReturned.sort_values(by = colName, ascending = True)
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "3":
+                print("\n-------------------------------------------\n")
+                print("Show entries where " + filterName + " is greater than: ")
+                numToFind = float(input())
+
+                rowsReturned = baseStats[baseStats[colName] > numToFind]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    rowsReturned = rowsReturned.sort_values(by = colName, ascending = True)
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "4":
+                print("\n-------------------------------------------\n")
+                print("Show entries where " + filterName + " is greater than or equal to: ")
+                numToFind = float(input())
+
+                rowsReturned = baseStats[baseStats[colName] >= numToFind]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    rowsReturned = rowsReturned.sort_values(by = colName, ascending = True)
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "5":
+                print("\n-------------------------------------------\n")
+                print("Show entries where " + filterName + " is less than: ")
+                numToFind = float(input())
+
+                rowsReturned = baseStats[baseStats[colName] < numToFind]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    rowsReturned = rowsReturned.sort_values(by = colName, ascending = True)
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "6": 
+                print("\n-------------------------------------------\n")
+                print("Show entries where " + filterName + " is less than or equal to: ")
+                numToFind = float(input())
+
+                rowsReturned = baseStats[baseStats[colName] <= numToFind]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    rowsReturned = rowsReturned.sort_values(by = colName, ascending = True)
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "7":
+                print("\n-------------------------------------------\n")
+
+                print("Show entries where " + filterName + " is between: ")
+                lowerBound = float(input())
+                print("AND")
+                upperBound = float(input())
+
+                rowsReturned = baseStats[(baseStats[colName] >= lowerBound) & (baseStats[colName] <= upperBound)]
+
+                if rowsReturned.empty:
+                    print("Sorry, there is no creature that satisfies your filter.\n")
+                else:
+                    rowsReturned = rowsReturned.sort_values(by = colName, ascending = True)
+                    print("Here are the results (sorted by " + colName + " in ascending order):\n")
+                    print(rowsReturned.to_string(justify = "center"))
+                print("\n-------------------------------------------\n")
+
+            case "8":
+                break
+            case _:
+                print("Sorry, " + filterChoice + " is not one of the options offered.\n")
+                            
+        print("Select filter option from the list below:\n")
+        print("""
+                    1. Equals (=) 
+                    2. Not Equal (!=)
+                    3. Greater Than (>)
+                    4. Greater Than or Equal to (>=)
+                    5. Less Than(<)
+                    6. Less Than or Equal to (<=)
+                    7. Between
+                    8. Return to Base Stats Filter Menu
+                    (Enter a number between 1 and 7, corresponding to your choice of filter)\n""")
+        filterChoice = input()
+
 def filterBaseStatsMenu(df):
     print("""\n\t\tFilter the table using the options below:
                 1. Types
                 2. Alignment
                 3. Size
-                4. AC
-                5. HP
-                6. Return to Stats Table Menu
+                4. CR (Challenge Rating)
+                5. AC (Armor Class)
+                6. HP (Health Point)
+                7. Return to Stats Table Menu
             (Enter the number corresponding to the filter option)\n""")
     
     choice = input()
     print("\n------------------------------------------------------------")
-    while choice != "6":
+    while choice != "7":
         match choice:
             case "1":
                 print("\nFiltering by Types\n")
@@ -185,7 +327,12 @@ def filterBaseStatsMenu(df):
 
                 for i in typesToFilter:
                     typeIndex = int(i.strip())
-                    typeName = typeDF.loc[typeIndex]["Types"]
+
+                    if typeIndex in typeDF.index:
+                        typeName = typeDF.loc[typeIndex]["Types"]
+                    else:
+                        print("Sorry, " + i + " is not part of the choices offered.")
+                        break
 
                     typeSearched.append(typeName)
 
@@ -240,7 +387,12 @@ def filterBaseStatsMenu(df):
 
                 for i in alignsToFilter:
                     alignIndex = int(i.strip())
-                    alignName = alignDF.loc[alignIndex]["ALIGNMENT"]
+
+                    if alignIndex in alignDF.index:
+                        alignName = alignDF.loc[alignIndex]["ALIGNMENT"]
+                    else:
+                        print("Sorry, " + i + " is not part of the choices offered.")
+                        break
 
                     alignSearched.append(alignName)
 
@@ -283,7 +435,12 @@ def filterBaseStatsMenu(df):
 
                 for i in sizeToFilter:
                     sizeIndex = int(i.strip())
-                    sizeName = sizeDF.loc[sizeIndex]["Size"]
+
+                    if sizeIndex in sizeDF:
+                        sizeName = sizeDF.loc[sizeIndex]["Size"]
+                    else:
+                        print("Sorry, " + i + " is not part of the choices offered.")
+                        break
 
                     sizeSearched.append(sizeName)
 
@@ -294,17 +451,54 @@ def filterBaseStatsMenu(df):
                     print("--------------------------------------\n")
                     returnedDF = baseStats[f]
                     print(returnedDF.to_string(justify = "center"))
+
+            case "4":
+                print("\nFiltering by CR (Challenge Rating)\n")
+                colName = "CR"
+                #Converting all string values in the column CR into float
+                baseStats[colName] = baseStats[colName].apply(lambda x : 
+                                                        0.5   if x == "1/2" or x == "0.5" else
+                                                        0.25  if x == "1/4" or x == "0.25" else
+                                                        0.125 if x == "1/8" or x == "0.125" else
+                                                        0 if x == "-" else
+                                                        int(x))
+
+                filterName = "CR (Challenge Rating)"
+
+                numericFilterMenu(filterName, colName)
+
+            case "5":
+                print("\nFiltering by AC (Armour Class)\n")
+                colName = "AC"
+                #Converting all string values in the column AC into numeric
+                baseStats[colName] = pd.to_numeric(baseStats[colName])
+                
+                filterName = "AC (Armour Class)"
+
+                numericFilterMenu(filterName, colName)
             case "6":
+                print("\nFiltering by HP (Health Point)\n")
+                colName = "HP"
+                #Converting all string values in the column AC into numeric
+                baseStats[colName] = pd.to_numeric(baseStats[colName])
+                
+                filterName = "HP (Health Point)"
+
+                numericFilterMenu(filterName, colName)
+            case "7":
                 break
+            case _ :
+                print("Please input a number bewtween 1 and 7.")
     
-        print("""\nFilter the Base Stats table using the options below:
+        print("""\n\tFilter the Base Stats table using the options below:
                 1. Types
                 2. Alignment
                 3. Size
-                4. AC
-                5. HP
-                6. Return to Stats Table Menu
-          (Enter the number corresponding to the filter option)\n""")
+                4. CR (Challenge Rating)
+                5. AC (Armor Class)
+                6. HP (Health Point)
+                7. Return to Stats Table Menu
+            (Enter the number corresponding to the filter option)\n""")
         choice = input()
 
 print("""Welcome to the DnD Monster Manual Searcher!\n
