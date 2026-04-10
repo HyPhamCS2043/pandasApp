@@ -37,7 +37,7 @@ with pd.ExcelFile(excelFile) as manual:
     savingThrows.index.name = "Index"
 
     #Read into a dataframe the 5th sheet of the excel file, which contains all monsters'condition immunities.
-    conditionImmunities = pd.read_excel(manual, sheet_name = 4, header = 0, usecols = "A, H:T")
+    conditionImmunities = pd.read_excel(manual, sheet_name = 4, header = 0, usecols = "A, H:T").fillna(0)
     conditionImmunities.index.name = "Index"
 
 def randomMonster(df):
@@ -98,9 +98,25 @@ def viewSpecificStatsMenu(name):
                 df_list = [mergeddf, dmgImmune, condImmune, biome]
 
                 allStats = reduce(lambda left, right: pd.merge(left, right, on = ["Name"], how = "outer"), df_list)
-                #print(allStats.to_string(justify = "center", line_width = 80))
-                print("Ability Scores:\n")
-                print(ability[:5].to_string(justify = "center"))
+
+                print("Monster Name: " + allStats.iloc[0]["Name"] + "\n")
+
+                print("Base Stats:\n" + baseStats[baseStats["Name"] == name].iloc[0, 2:8].to_string())
+
+                print("\nAbility Scores:\n")
+                print(allStats[["STR", "DEX", "CON", "INT", "WIS", "CHA"]].to_string(justify = "center"))
+
+                print("\nSaving Throws:")
+                print(allStats.iloc[0, 7:13].to_string())
+
+                print("\nDamage Immunities:")
+                print(allStats.iloc[0, 13:26].to_string())
+
+                print("\nCondition Immunities:")
+                print(allStats.iloc[0, 26:39].to_string())
+
+                print("\nBiome:")
+                print(allStats.iloc[0, 39:50].to_string())
 
             case "7":
                 break
@@ -172,8 +188,7 @@ while inputChoice != "4":
                 #This line returns a DataFrame containing the row(s) where the string in the "Name" column contains the monsterName variable (case insensitive)
                 #to_string() is used to print the DataFrame without the name and dtype at the bottom.
                 print(baseStats[baseStats["Name"].str.contains(monsterName, case = False)].to_string())
-                #print("Testing dataframe:\n")
-                #print(baseStats[baseStats["Name"].str.contains(monsterName, case = False)].iloc[0].to_string())
+
             else:
                 print("Sorry, the monster you are looking for is not in the excel file.")
         else:
