@@ -62,6 +62,10 @@ For example, typing "1" then pressing **Enter** will bring up:
 
 ![Random Creature Menu Interface](https://github.com/HyPhamCS2043/pandasApp/blob/main/DnDReferencer1.jpg)
 
-To learn more about the creature, for example, type 
+To learn more about the creature's Ability Score, for example, type "1" and press [Enter] again!
+The following screen should appears: 
 
+![Ability Score output](https://github.com/HyPhamCS2043/pandasApp/blob/main/DnDReferencer2.jpg)
+
+The entire program can be used with keyboard inputs alone. Have fun exploring the different menu branches! The majority of inputs required are integers, or in some cases, multiple integers separated by a comma.
 
