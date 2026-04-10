@@ -1,5 +1,12 @@
 #Author: Hy Pham
 import pandas as pd;
+from functools import reduce
+
+#pd.options.display.max_columns = None
+#pd.options.display.max_rows = None
+#pd.set_option('expand_frame_repr', False)
+#print(pd.get_option("display.width"))
+
 
 #Store the path to the excel file
 excelFile = "..\MonsterManualExcel\D&D 5e Monster Manual by Ability Scores, Saves, Damage and Condition immunities.xlsx"
@@ -41,25 +48,87 @@ def mainMenuOptions():
     #print out the main menu
     print("""------------------------------------------------------------\n
 Main Menu:
-      1. Retrieve the base stats of a random monster
-      2. Search for a monster by name
-      3. View Full Statistic Tables
+      1. Retrieve the base stats of a random creature
+      2. Search for a creature by name
+      3. View Full Stats Tables
       4. Exit the program""")
 
-#pd.options.display.max_columns = None
-#pd.options.display.max_rows = None
-#pd.set_option('expand_frame_repr', False)
-#print(pd.get_option("display.width"))
+def viewSpecificStatsMenu(name):
+
+    ability = abilityScores[abilityScores["Name"] == name]
+    saves = savingThrows[savingThrows["Name"] == name]
+    dmgImmune = damageImmunities[damageImmunities["Name"] == name]
+    condImmune = conditionImmunities[conditionImmunities["Name"] == name]
+    biome = biomeStats[biomeStats["Name"] == name]
+
+    print("""
+      1. View creature's Ability Score 
+      2. View creature's Saving Throws 
+      3. View creature's Damage Immunities 
+      4. Get creature's Condition Immunities 
+      5. Get creature's Biome 
+      6. Get ALL of the above 
+      7. Return to Main Menu
+    What would you like to do? (Enter the number corresponding to your choice):""")
+    choice = input()
+    print("\n------------------------------------------------------------")
+    print("\n")
+    while choice != 7:
+        match choice:
+            case "1":
+                print("Ability Scores:\n")
+                print(ability.to_string(justify = "center"))
+            case "2":
+                print("Saving Throw Modifiers:\n")
+                print(saves.to_string(justify = "center"))
+            case "3":
+                print("Damage Immunity:\n")
+                print(dmgImmune.to_string(justify = "center"))
+            case "4":
+                print("Condition Immunity:\n")
+                print(condImmune.to_string(justify = "center"))
+            case "5":
+                print("Biomes:\n")
+                print(biome.to_string(justify = "center"))
+            case "6":
+                
+                #merge behaves like SQL join. Joining these tables using the column Name as join key
+                mergeddf = pd.merge(ability, saves, on = ['Name'], suffixes = ("", " save"))
+
+                df_list = [mergeddf, dmgImmune, condImmune, biome]
+
+                allStats = reduce(lambda left, right: pd.merge(left, right, on = ["Name"], how = "outer"), df_list)
+                #print(allStats.to_string(justify = "center", line_width = 80))
+                print("Ability Scores:\n")
+                print(ability[:5].to_string(justify = "center"))
+
+            case "7":
+                break
+            case _:
+                print("Invalid input. Please enter a number between 1 and 7: ")
+                break
+        print("\n------------------------------------------------------------")
+        print("""
+      1. View creature's Ability Score 
+      2. View creature's Saving Throws 
+      3. View creature's Damage Immunities 
+      4. Get creature's Condition Immunities 
+      5. Get creature's Biome 
+      6. Get ALL of the above 
+      7. Return to Main Menu
+    What would you like to do? (Enter the number corresponding to your choice):""")
+        choice = input()
+
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
 This program is designed to assist you with searching through
 the DnD 5e Monster Manual excel file, which contains the stats 
-of 691 monsters.\n
+of 691 creatures.\n
 ------------------------------------------------------------\n
 Main Menu:
-      1. Retrieve the base stats of a random monster
-      2. Search for a monster by name
-      3. View Full Statistic Tables
+      1. Retrieve the base stats of a random creature
+      2. Search for a creature by name
+      3. View Full Stats Tables
       4. Exit the program
 What would you like to do? (Enter the number corresponding to your choice):""")
 
@@ -69,7 +138,10 @@ inputChoice = input()
 while inputChoice != "4":
     if inputChoice == "1":
         print("\nHere's a fun creature for you!\n")
-        print(randomMonster(baseStats).to_string())
+        random = randomMonster(baseStats)
+        print(random.to_string(justify = "center"))
+
+        viewSpecificStatsMenu(random.iloc[0]["Name"])
 
     elif inputChoice == "2":
         monsterName = input("Please enter the name of the monster:\n")
@@ -87,6 +159,8 @@ while inputChoice != "4":
                 #This line returns a DataFrame containing the row(s) where the "Name" column matches the monsterName variable
                 #to_string() is used to print the DataFrame without the name and dtype at the bottom.
                 print(baseStats[baseStats["Name"] == monsterName].to_string())
+                
+                #viewSpecificStatsMenu()
 
             else:
                 print("Sorry, the monster you are looking for is not in the excel file.")
@@ -130,10 +204,6 @@ while inputChoice != "4":
         elif tableChoice == "4":
             print("Monsters by Condition Immunities:\n")
             print(conditionImmunities.to_string(justify = "center"))
-            print("""\n
-                  ------------------------------------------------------------------------------------
-                  NOTE: If the table is too big, zoom out by clicking [CTRL] and [-] at the same time.
-                  ------------------------------------------------------------------------------------""")
         elif tableChoice == "5":
             print("Monsters by Damage Immunities:\n")
             print(damageImmunities.to_string(justify = "center"))
@@ -144,10 +214,15 @@ while inputChoice != "4":
             mainMenuOptions()
         else:
             print("Please enter a number from 1 to 7.")
+        
+        print("""\n
+                  ------------------------------------------------------------------------------------
+                  NOTE: If the table is too big, zoom out by clicking [CTRL] and [-] at the same time.
+                  ------------------------------------------------------------------------------------""")
     else:
         print("Invalid input, please enter a number from 1 to 4.")
 
-    #mainMenuOptions()
+    mainMenuOptions()
     print("\nWhat would you like to do? (Enter the number corresponding to your choice):")
     inputChoice = input()
 
