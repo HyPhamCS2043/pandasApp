@@ -156,7 +156,7 @@ def filterBaseStatsMenu(df):
                         2. Beast       6. Elemental   10. Fiend (Devil)   14. Ooze
                         3. Celestial   7. Fey         11. Giant           15. Plant
                         4. Construct   8. Fiend       12. Humanoid        16. Undead
-                    (Enter 1 or more number corresponding to the Types, separated by a comma ',')""")
+                    (Enter 1 or more numbers corresponding to the Types, separated by a comma ',')""")
                 
                 types = input()
                 typesToFilter = types.split(",")
@@ -196,8 +196,105 @@ def filterBaseStatsMenu(df):
                     print("--------------------------------------\n")
                     returnedDF = baseStats[f]
                     print(returnedDF.to_string(justify = "center"))
+            case "2":
+                print("\nFiltering by Alignments\n")
+                print("Here are all the available creature's Alignments:\n")
+                print("""
+                        1. ANY                                      10. LG (Lawful Good)
+                        2. ANY EVIL                                 11. LN (Lawful Neutral)
+                        3. C (Chaotic)                              12. N (Neutral)
+                        4. CE (Chaotic Evil)                        13. NE (Neutral Evil)   
+                        5. CG (Chaotic Good)                        14. NG (Neutral Good)
+                        6. CG (Chaotic Good) OR NE (Neutral Evil)   15. NOT GOOD
+                        7. CN (Chaotic Neutral)                     16. NOT LAWFUL
+                        8. E (Evil)                                 17. Same as Eidolon
+                        9. LE (Lawful Evil)                         18. U (Unaligned)
+                    (Enter 1 or more numbers corresponding to the Alignments, separated by a comma ',')""")
+                
+                align = input()
+                alignsToFilter = align.split(",")
+                alignDF = pd.DataFrame({
+                    "ALIGNMENT": [
+                        "ANY",
+                        "ANY EVIL",
+                        "C",
+                        "CE",
+                        "CG",
+                        "CG OR NE",
+                        "CN",
+                        "E",
+                        "LE",
+                        "LG",
+                        "LN",
+                        "N",
+                        "NE",
+                        "NG",
+                        "NOT GOOD",
+                        "NOT LAWFUL",
+                        "Same as Eidolon",
+                        "U",],
+                }, index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
+                
+                filterList = []
+                alignSearched = []
 
-            case 6:
+                for i in alignsToFilter:
+                    alignIndex = int(i.strip())
+                    alignName = alignDF.loc[alignIndex]["ALIGNMENT"]
+
+                    alignSearched.append(alignName)
+
+                    filterPhrase = baseStats["ALIGNMENT"] == alignName
+                    filterList.append(filterPhrase)
+                
+                for f in filterList:
+                    print("--------------------------------------\n")
+                    returnedDF = baseStats[f]
+                    print(returnedDF.to_string(justify = "center"))
+
+            case "3":
+                print("\nFiltering by Size\n")
+                print("Here are all the available creature's Size:\n")
+                print("""
+                        1. Tiny
+                        2. Small     
+                        3. Medium
+                        4. Large
+                        5. Huge
+                        6. Gargantuan
+                        7. VARIES
+                    (Enter 1 or more numbers corresponding to the Types, separated by a comma ',')""")
+                
+                size = input()
+                sizeToFilter = size.split(",")
+                sizeDF = pd.DataFrame({
+                    "Size": [
+                        "Tiny",
+                        "Small",     
+                        "Medium", 
+                        "Large", 
+                        "Huge", 
+                        "Gargantuan", 
+                        "VARIES",],
+                }, index = [1, 2, 3, 4, 5, 6, 7])
+                
+                filterList = []
+                sizeSearched = []
+
+                for i in sizeToFilter:
+                    sizeIndex = int(i.strip())
+                    sizeName = sizeDF.loc[sizeIndex]["Size"]
+
+                    sizeSearched.append(sizeName)
+
+                    filterPhrase = baseStats["Size"] == sizeName
+                    filterList.append(filterPhrase)
+                
+                for f in filterList:
+                    print("--------------------------------------\n")
+                    returnedDF = baseStats[f]
+                    print(returnedDF.to_string(justify = "center"))
+            case "6":
                 break
     
         print("""\nFilter the Base Stats table using the options below:
