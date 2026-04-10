@@ -46,7 +46,7 @@ def randomMonster(df):
 def mainMenuOptions():
     #print out the main menu
     print("""------------------------------------------------------------\n
-Main Menu:
+MAIN MENU:
       1. Retrieve the base stats of a random creature
       2. Search for a creature by name
       3. View Full Stats Tables
@@ -134,7 +134,7 @@ def viewSpecificStatsMenu(name):
     What would you like to do? (Enter the number corresponding to your choice):""")
         choice = input()
 
-def numericFilterMenu(filterName, colName):
+def numericFilterMenu(filterName, colName, df):
     print("Select filter option from the list below:\n")
     print("""
                     1. Equals (=) 
@@ -144,7 +144,7 @@ def numericFilterMenu(filterName, colName):
                     5. Less Than(<)
                     6. Less Than or Equal to (<=)
                     7. Between
-                    8. Return to Base Stats Filter Menu
+                    8. Return to Filter Menu
                     (Enter a number between 1 and 7, corresponding to your choice of filter)\n""")
                 
     filterChoice = input()
@@ -155,7 +155,7 @@ def numericFilterMenu(filterName, colName):
                 print("Show entries where " + filterName + " is equal to: ")
                 numToFind = float(input())
 
-                rowsReturned = baseStats[baseStats[colName] == numToFind]
+                rowsReturned = df[df[colName] == numToFind]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -169,7 +169,7 @@ def numericFilterMenu(filterName, colName):
                 print("Show entries where " + filterName + " is NOT equal to: ")
                 numToFind = float(input())
 
-                rowsReturned = baseStats[baseStats[colName] != numToFind]
+                rowsReturned = df[df[colName] != numToFind]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -184,7 +184,7 @@ def numericFilterMenu(filterName, colName):
                 print("Show entries where " + filterName + " is greater than: ")
                 numToFind = float(input())
 
-                rowsReturned = baseStats[baseStats[colName] > numToFind]
+                rowsReturned = df[df[colName] > numToFind]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -199,7 +199,7 @@ def numericFilterMenu(filterName, colName):
                 print("Show entries where " + filterName + " is greater than or equal to: ")
                 numToFind = float(input())
 
-                rowsReturned = baseStats[baseStats[colName] >= numToFind]
+                rowsReturned = df[df[colName] >= numToFind]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -214,7 +214,7 @@ def numericFilterMenu(filterName, colName):
                 print("Show entries where " + filterName + " is less than: ")
                 numToFind = float(input())
 
-                rowsReturned = baseStats[baseStats[colName] < numToFind]
+                rowsReturned = df[df[colName] < numToFind]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -229,7 +229,7 @@ def numericFilterMenu(filterName, colName):
                 print("Show entries where " + filterName + " is less than or equal to: ")
                 numToFind = float(input())
 
-                rowsReturned = baseStats[baseStats[colName] <= numToFind]
+                rowsReturned = df[df[colName] <= numToFind]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -247,7 +247,7 @@ def numericFilterMenu(filterName, colName):
                 print("AND")
                 upperBound = float(input())
 
-                rowsReturned = baseStats[(baseStats[colName] >= lowerBound) & (baseStats[colName] <= upperBound)]
+                rowsReturned = df[(df[colName] >= lowerBound) & (df[colName] <= upperBound)]
 
                 if rowsReturned.empty:
                     print("Sorry, there is no creature that satisfies your filter.\n")
@@ -271,11 +271,13 @@ def numericFilterMenu(filterName, colName):
                     5. Less Than(<)
                     6. Less Than or Equal to (<=)
                     7. Between
-                    8. Return to Base Stats Filter Menu
+                    8. Return to Filter Menu
                     (Enter a number between 1 and 7, corresponding to your choice of filter)\n""")
         filterChoice = input()
 
-def filterBaseStatsMenu(df):
+def filterBaseStatsMenu():
+    print("=====================================")
+    print("Base Stats Filter Menu")
     print("""\n\t\tFilter the table using the options below:
                 1. Types
                 2. Alignment
@@ -465,7 +467,7 @@ def filterBaseStatsMenu(df):
 
                 filterName = "CR (Challenge Rating)"
 
-                numericFilterMenu(filterName, colName)
+                numericFilterMenu(filterName, colName, baseStats)
 
             case "5":
                 print("\nFiltering by AC (Armour Class)\n")
@@ -475,7 +477,7 @@ def filterBaseStatsMenu(df):
                 
                 filterName = "AC (Armour Class)"
 
-                numericFilterMenu(filterName, colName)
+                numericFilterMenu(filterName, colName, baseStats)
             case "6":
                 print("\nFiltering by HP (Health Point)\n")
                 colName = "HP"
@@ -484,12 +486,14 @@ def filterBaseStatsMenu(df):
                 
                 filterName = "HP (Health Point)"
 
-                numericFilterMenu(filterName, colName)
+                numericFilterMenu(filterName, colName, baseStats)
             case "7":
                 break
             case _ :
                 print("Please input a number bewtween 1 and 7.")
-    
+
+        print("=====================================")
+        print("Base Stats Filter Menu")
         print("""\n\tFilter the Base Stats table using the options below:
                 1. Types
                 2. Alignment
@@ -501,13 +505,206 @@ def filterBaseStatsMenu(df):
             (Enter the number corresponding to the filter option)\n""")
         choice = input()
 
+def filterAbilityScoresMenu():
+    print("=====================================")
+    print("Ability Score Filter Menu")
+    print("""\n\t\tFilter the table using the options below:
+                1. STR (Strength)
+                2. DEX (Dexterity)
+                3. CON (Constitution)
+                4. INT (Intelligent)
+                5. WIS (Wisdom)
+                6. CHA (Charisma)
+                7. Return to Stats Table Menu
+            (Enter the number corresponding to the filter option)\n""")
+    
+    choice = input()
+    print("\n------------------------------------------------------------")
+    while choice != "7":
+        match choice:
+            case "1":
+                print("\nFiltering by STR (Strenght)\n")
+                colName = "STR"
+                #Converting all string values in the column AC into numeric
+                abilityScores[colName] = pd.to_numeric(abilityScores[colName])
+                
+                filterName = "STR (Strenght)"
+
+                numericFilterMenu(filterName, colName, abilityScores)
+
+            case "2":
+                print("\nFiltering by DEX (Dexterity)\n")
+                colName = "DEX"
+                #Converting all string values in the column AC into numeric
+                abilityScores[colName] = pd.to_numeric(abilityScores[colName])
+                
+                filterName = "DEX (Dexterity)"
+
+                numericFilterMenu(filterName, colName, abilityScores)
+
+            case "3":
+                print("\nFiltering by CON (Constitution)\n")
+                colName = "CON"
+                #Converting all string values in the column AC into numeric
+                abilityScores[colName] = pd.to_numeric(abilityScores[colName])
+                
+                filterName = "CON (Constitution)"
+
+                numericFilterMenu(filterName, colName, abilityScores)
+
+            case "4":
+                print("\nFiltering by INT (Intelligent)\n")
+                colName = "INT"
+                #Converting all string values in the column AC into numeric
+                abilityScores[colName] = pd.to_numeric(abilityScores[colName])
+                
+                filterName = "INT (Intelligent)"
+
+                numericFilterMenu(filterName, colName, abilityScores)
+
+            case "5":
+                print("\nFiltering by WIS (Wisdom)\n")
+                colName = "WIS"
+                #Converting all string values in the column AC into numeric
+                abilityScores[colName] = pd.to_numeric(abilityScores[colName])
+                
+                filterName = "WIS (Wisdom)"
+
+                numericFilterMenu(filterName, colName, abilityScores)
+
+            case "6":
+                print("\nFiltering by CHA (Charisma)\n")
+                colName = "CHA"
+                #Converting all string values in the column AC into numeric
+                abilityScores[colName] = pd.to_numeric(abilityScores[colName])
+                
+                filterName = "CHA (Charisma)"
+
+                numericFilterMenu(filterName, colName, abilityScores)
+
+            case "7":
+                break
+            case _ :
+                print("Please input a number bewtween 1 and 7.")
+
+        print("=====================================")
+        print("Ability Score Filter Menu")
+        print("""\n\t\tFilter the table using the options below:
+                1. STR (Strength)
+                2. DEX (Dexterity)
+                3. CON (Constitution)
+                4. INT (Intelligent)
+                5. WIS (Wisdom)
+                6. CHA (Charisma)
+                7. Return to Stats Table Menu
+            (Enter the number corresponding to the filter option)\n""")
+    
+        choice = input()
+
+def filterSavingThrowMenu():
+    print("=====================================")
+    print("Saving Throw Modifier Filter Menu")
+    print("""\n\t\tFilter the table using the options below:
+                1. STR (Strength) 
+                2. DEX (Dexterity)
+                3. CON (Constitution)
+                4. INT (Intelligent)
+                5. WIS (Wisdom)
+                6. CHA (Charisma)
+                7. Return to Stats Table Menu
+            (Enter the number corresponding to the filter option)\n""")
+    
+    choice = input()
+    print("\n------------------------------------------------------------")
+    while choice != "7":
+        match choice:
+            case "1":
+                print("\nFiltering by STR (Strenght)\n")
+                colName = "STR"
+                #Converting all string values in the column AC into numeric
+                savingThrows[colName] = pd.to_numeric(savingThrows[colName])
+                
+                filterName = "STR Saving Throw Modifier"
+
+                numericFilterMenu(filterName, colName, savingThrows)
+
+            case "2":
+                print("\nFiltering by DEX (Dexterity)\n")
+                colName = "DEX"
+                #Converting all string values in the column AC into numeric
+                savingThrows[colName] = pd.to_numeric(savingThrows[colName])
+                
+                filterName = "DEX Saving Throw Modifier"
+
+                numericFilterMenu(filterName, colName, savingThrows)
+
+            case "3":
+                print("\nFiltering by CON (Constitution)\n")
+                colName = "CON"
+                #Converting all string values in the column AC into numeric
+                savingThrows[colName] = pd.to_numeric(savingThrows[colName])
+                
+                filterName = "CON Saving Throw Modifier"
+
+                numericFilterMenu(filterName, colName, savingThrows)
+
+            case "4":
+                print("\nFiltering by INT (Intelligent)\n")
+                colName = "INT"
+                #Converting all string values in the column AC into numeric
+                savingThrows[colName] = pd.to_numeric(savingThrows[colName])
+                
+                filterName = "INT Saving Throw Modifier"
+
+                numericFilterMenu(filterName, colName, savingThrows)
+
+            case "5":
+                print("\nFiltering by WIS (Wisdom)\n")
+                colName = "WIS"
+                #Converting all string values in the column AC into numeric
+                savingThrows[colName] = pd.to_numeric(savingThrows[colName])
+                
+                filterName = "WIS Saving Throw Modifier"
+
+                numericFilterMenu(filterName, colName, savingThrows)
+
+            case "6":
+                print("\nFiltering by CHA (Charisma)\n")
+                colName = "CHA"
+                #Converting all string values in the column AC into numeric
+                savingThrows[colName] = pd.to_numeric(savingThrows[colName])
+                
+                filterName = "CHA Saving Throw Modifier"
+
+                numericFilterMenu(filterName, colName, savingThrows)
+
+            case "7":
+                break
+            case _ :
+                print("Please input a number bewtween 1 and 7.")
+
+        print("=====================================")
+        print("Saving Throw Filter Menu")
+        print("""\n\t\tFilter the table using the options below:
+                1. STR (Strength)
+                2. DEX (Dexterity)
+                3. CON (Constitution)
+                4. INT (Intelligent)
+                5. WIS (Wisdom)
+                6. CHA (Charisma)
+                7. Return to Stats Table Menu
+            (Enter the number corresponding to the filter option)\n""")
+    
+        choice = input()
+
+#START PAGE
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
 This program is designed to assist you with searching through
 the DnD 5e Monster Manual excel file, which contains the stats 
 of 691 creatures.\n
 ------------------------------------------------------------\n
-Main Menu:
+MAIN MENU:
       1. Retrieve the base stats of a random creature
       2. Search for a creature by name
       3. View Full Stats Tables
@@ -584,49 +781,56 @@ while inputChoice != "4":
     elif inputChoice == "3":
         print("Stat Tables Menu:\n")
         print("""
-        1. Monsters by Base Stats
-        2. Monsters by Ability Scores
-        3. Monsters by Saving Throws
-        4. Monsters by Condition Immunities
-        5. Monsters by Damage Immunities
-        6. Monsters by Habitats
+        1. Creatures by Base Stats
+        2. Creatures by Ability Scores
+        3. Creatures by Saving Throws
+        4. Creatures by Condition Immunities
+        5. Creatures by Damage Immunities
+        6. Creatures by Habitats
         7. Back to Main Menu
         (Enter the number corresponding to the table you want to view)\n""")
         tableChoice = input()
 
         while tableChoice != "7":
             if tableChoice == "1":
-                print("Monsters by Base Stats:\n")
+                print("Creatures by Base Stats:\n")
                 print(baseStats.to_string(justify = "center"))
 
-                filterBaseStatsMenu(baseStats)
+                filterBaseStatsMenu()
 
             elif tableChoice == "2":
-                print("Monsters by Ability Scores:\n")
+                print("Creatures by Ability Scores:\n")
                 print(abilityScores.to_string(justify = "center"))
+
+                filterAbilityScoresMenu()
+
             elif tableChoice == "3":
-                print("Monsters by Saving Throws:\n")
+                print("Creatures by Saving Throws:\n")
                 print(savingThrows.to_string(justify = "center"))
+
+                filterSavingThrowMenu()
+
             elif tableChoice == "4":
-                print("Monsters by Condition Immunities:\n")
+                print("Creatures by Condition Immunities:\n")
                 print(conditionImmunities.to_string(justify = "center"))
             elif tableChoice == "5":
-                print("Monsters by Damage Immunities:\n")
+                print("Creatures by Damage Immunities:\n")
                 print(damageImmunities.to_string(justify = "center"))
             elif tableChoice == "6":
-                print("Monsters by Habitats:\n")
+                print("Creatures by Habitats:\n")
                 print(habitatStats.to_string(justify = "center"))
             else:
                 print("Please enter a number from 1 to 7.")
 
             print("\n------------------------------------------------------------")
+            print("Stat Tables Menu:\n")
             print("""
-        1. Monsters by Base Stats
-        2. Monsters by Ability Scores
-        3. Monsters by Saving Throws
-        4. Monsters by Condition Immunities
-        5. Monsters by Damage Immunities
-        6. Monsters by Habitats
+        1. Creatures by Base Stats
+        2. Creatures by Ability Scores
+        3. Creatures by Saving Throws
+        4. Creatures by Condition Immunities
+        5. Creatures by Damage Immunities
+        6. Creatures by Habitats
         7. Back to Main Menu
         (Enter the number corresponding to the table you want to view)\n""")
             tableChoice = input()
