@@ -697,6 +697,100 @@ def filterSavingThrowMenu():
     
         choice = input()
 
+def filterConditionImmuneMenu():
+    print("=====================================")
+    print("Condition Immunity Filter Menu")
+    print("""\n\t\tHere are all Conditions:
+                1. Blinded              8. Petrified                  
+                2. Charmed              9. Poisoned        
+                3. Deafened             10. Prone       
+                4. Exhaustion           11. Restrained
+                5. Frightened           12. Stunned
+                6. Grappled             13. Unconscious
+                7. Paralyzed             
+            (Enter one or multiple numbers (between 1 and 13) corresponding to 
+            the Conditions that the creature is immune to, separated by a comma ',')\n""")
+    
+    conditions = input()
+    conditionList = conditions.split(",")
+    conditionsDF = pd.DataFrame({
+        "Conditions" : [
+            "Blinded",
+            "Charmed",
+            "Deafened",
+            "Exhaustion",
+            "Frightened",
+            "Grappled",
+            "Paralyzed",
+            "Petrified",
+            "Poisoned",
+            "Prone",
+            "Restrained",
+            "Stunned",
+            "Unconscious",
+        ],
+    }, index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+    print("\n------------------------------------------------------------")
+
+    print("Here are all the creatures that are immune to: \n")
+
+    condNameSelected = []
+    filterList = []
+    for c in conditionList:
+        conditionIndex = int(c.strip())
+
+        if conditionIndex in conditionsDF.index:
+            conditionName = conditionsDF.loc[conditionIndex]["Conditions"]
+            condNameSelected.append(conditionName)
+            
+        else:
+            print("Sorry, " + c + " is not part of the choices offered.")
+            break
+
+        filterList.append(conditionImmunities[conditionName] == 1)
+
+    print(", ".join(condNameSelected))
+
+    initialDF = conditionImmunities
+    filteredDFList = []
+    finalFilteredDF = None
+
+    
+    #If there is more than 1 condition filter, apply them cumulatively through reduce()
+    if len(filterList) > 1:
+        
+        cond = 0
+        for i in filterList:
+            #Select only the column that the user inputs along with the name column
+            #Applying the filter conditions (stored in filterList) to the intial dataframe iteratively
+            filtered = initialDF[i][["Name", condNameSelected[cond]]]
+            filteredDFList.append(filtered)
+            cond += 1
+        
+        #Merging all the different dataframes generated from the condition list above
+        finalFilteredDF = reduce(lambda left, right: pd.merge(left, right, how = "inner", on = "Name"), filteredDFList)
+        
+
+
+    else:
+        finalFilteredDF = initialDF[filterList[0]]
+    
+    print(finalFilteredDF.to_string())
+
+def filterDamageImmuneMenu():
+    print("=====================================")
+    print("Condition Immunity Filter Menu")
+    print("""\n\t\tHere are all Damage Types:
+                1. Blinded              8. Petrified                  
+                2. Charmed              9. Poisoned        
+                3. Deafened             10. Prone       
+                4. Exhaustion           11. Restrained
+                5. Frightened           12. Stunned
+                6. Grappled             13. Unconscious
+                7. Paralyzed             
+            (Enter one or multiple numbers (between 1 and 13) corresponding to 
+            the Conditions that the creature is immune to, separated by a comma ',')\n""")
+    
 #START PAGE
 print("""Welcome to the DnD Monster Manual Searcher!\n
 ------------------------------------------------------------\n
@@ -813,6 +907,9 @@ while inputChoice != "4":
             elif tableChoice == "4":
                 print("Creatures by Condition Immunities:\n")
                 print(conditionImmunities.to_string(justify = "center"))
+
+                filterConditionImmuneMenu()
+
             elif tableChoice == "5":
                 print("Creatures by Damage Immunities:\n")
                 print(damageImmunities.to_string(justify = "center"))
