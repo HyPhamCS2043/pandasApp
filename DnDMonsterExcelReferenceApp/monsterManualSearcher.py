@@ -777,8 +777,22 @@ def filterConditionImmuneMenu():
 
 def filterDamageImmuneMenu():
     print("=====================================")
-    print("Condition Immunity Filter Menu")
-    print("""\n\t\tHere are all Damage Types:
+    print("Damage Immunity Filter Menu")
+
+    print("\n\tSelect one of the options below: ")
+    print("""
+                1. Immunity (takes 0 damage)
+                2. Resistance (takes 1/2 damage)
+                3. Vulnerable (takes 2 times the damage)
+                (Enter 1, 2, OR 3 to proceed)""")
+    statusType = input()
+    while statusType != "1" and statusType != "2" and statusType != "3":
+        print("Invalid input, please enter 1, 2, OR 3")
+        statusType = input()
+    print("--------------------------------------")
+
+
+    print("""\n\t\tSelect one or more of the Damage Types below:
                 1. Bludgeoning      8. Lightning                  
                 2. Piercing         9. Necrotic        
                 3. Slashing         10. Poison       
@@ -786,9 +800,83 @@ def filterDamageImmuneMenu():
                 5. Cold             12. Radiant
                 6. Fire             13. Thunder
                 7. Force            
-       
-            (Enter one or multiple numbers (between 1 and 13) corresponding to 
-            the Conditions that the creature is immune to, separated by a comma ',')\n""")
+            (Enter one or multiple numbers (between 1 and 13) separated by a comma ',')\n""")
+
+    damageType = input()
+    damageTypeList = damageType.split(",")
+    damageTypeDF = pd.DataFrame({
+        "Damage" : [
+            "Bludgeoning",
+            "Piercing",
+            "Slashing",
+            "Acid",
+            "Cold",
+            "Fire",
+            "Force",
+            "Lightning",
+            "Necrotic",
+            "Poison",
+            "Psychic",
+            "Radiant",
+            "Thunder",
+        ],
+    }, index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+    print("\n------------------------------------------------------------")
+
+    if statusType == "1":
+        statusString = "immune"
+    elif statusType == "2":
+        statusString = "resistant"
+    else:
+        statusString = "vulnerable"
+    print("Here are all the creatures that are " + statusString + " to: \n")
+
+
+    damageTypeSelected = []
+    filterList = []
+    for c in damageTypeList:
+        damageTypeIndex = int(c.strip())
+
+        if damageTypeIndex in damageTypeDF.index:
+            damageTypeName = damageTypeDF.loc[damageTypeIndex]["Damage"]
+            damageTypeSelected.append(damageTypeName)
+            
+        else:
+            print("Sorry, " + c + " is not part of the choices offered.")
+            break
+
+        if statusType == "1":
+            filterList.append(damageImmunities[damageTypeName] == 2)
+        elif statusType == "2":
+            filterList.append(damageImmunities[damageTypeName] == 1)
+        else:
+            filterList.append(damageImmunities[damageTypeName] == -1)
+
+    print(", ".join(damageTypeSelected))
+    print("\n")
+
+    initialDF = damageImmunities
+    filteredDFList = []
+    finalFilteredDF = None
+    
+    #If there is more than 1 condition filter, apply them cumulatively through reduce()
+    if len(filterList) > 1:
+        
+        k = 0
+        for i in filterList:
+            #Select only the column that the user inputs along with the name column
+            #Applying the filter conditions (stored in filterList) to the intial dataframe iteratively
+            filtered = initialDF[i][["Name", damageTypeSelected[k]]]
+            filteredDFList.append(filtered)
+            k += 1
+        
+        #Merging all the different dataframes generated from the condition list above
+        finalFilteredDF = reduce(lambda left, right: pd.merge(left, right, how = "inner", on = "Name"), filteredDFList)
+
+    else:
+        finalFilteredDF = initialDF[filterList[0]][["Name", damageTypeSelected[0]]]
+    
+    print(finalFilteredDF.to_string())  
 
 def filterHabitatMenu():
     print("=====================================")
@@ -988,6 +1076,9 @@ while inputChoice != "4":
             elif tableChoice == "5":
                 print("Creatures by Damage Immunities:\n")
                 print(damageImmunities.to_string(justify = "center"))
+
+                filterDamageImmuneMenu()
+
             elif tableChoice == "6":
                 print("Creatures by Habitats:\n")
                 print(habitatStats.to_string(justify = "center"))
