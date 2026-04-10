@@ -60,6 +60,6 @@ The interface below should appear in your terminal:
 To navigate between the menu, respond to the command prompt by typing the number that corresponds to the menu option that you would like to select, then pressing **Enter**.  
 For example, typing "1" then pressing **Enter** will bring up:
 
-
+![Random Creature Menu Interface](image-url)
 
 
