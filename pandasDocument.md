@@ -137,6 +137,49 @@ DataFrames also has optional arguments to rename the labels of rows and columns:
 * index (for row labels)
 * columns (for column labels)
 
+**Example**
+Input
+```python
+pd.DataFrame(data, index=["first", "second"])
+```
+
+Output
+```
+        A    B         C
+first   1  2.0  b'Hello'
+second  2  3.0  b'World'
+```
+
+Input
+```python
+pd.DataFrame(data, columns=["C", "A", "B"])
+```
+
+Output
+```
+          C  A    B
+0  b'Hello'  1  2.0
+1  b'World'  2  3.0
+```
+
+**Example — Creating a DataFrame from structured or record array:**
+
+Input
+```python
+data = np.zeros((2,), dtype=[("A", "i4"), ("B", "f4"), ("C", "S10")])
+
+data[:] = [(1, 2.0, "Hello"), (2, 3.0, "World")]
+
+pd.DataFrame(data)
+```
+
+Output
+```
+   A    B         C
+0  1  2.0  b'Hello'
+1  2  3.0  b'World'
+```
+[3]
 
 
 ## References
