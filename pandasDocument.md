@@ -5,7 +5,17 @@
 **pandas** is a an open-source Python library that comes with a wide array of data anlysis and manipulation functionalities.
 Developed by AQR Capital Management in 2008 and becoming open-source in 2009, pandas is "actively supported today by a community of like-minded individuals around the world who contribute their valuable time and energy." [1]
 
-# 2. Key Features
+To use pandas, starts by installing the package with
+
+    pip3 install pandas
+
+Then, import the package as followed at the top of your code:
+
+```
+import pandas as pd
+```
+
+# 2. Key Features, Usage, and Functionalities
 
 ### a. Series and DataFrame
 **pandas'** primary purpose is to provide developers with efficient, flexible, fast, powerful, and easy-to-use ways to analyze and manipulate a massive amount of data.   
@@ -161,7 +171,7 @@ Output
 0  b'Hello'  1  2.0
 1  b'World'  2  3.0
 ```
-
+-------------------------
 **Example — Creating a DataFrame from structured or record array:**
 
 Input
@@ -181,8 +191,67 @@ Output
 ```
 [3]
 
+--------------------------
+**Example — Creating a DataFrame from a Series:**
+Input:
+```python
+ser = pd.Series(range(3), index=list("abc"), name="ser")
 
+pd.DataFrame(ser)
+```
+
+Output:
+```
+   ser
+a    0
+b    1
+c    2
+```
+[3]
+-------------------------------------------------
+### b. Viewing Data
+
+Instead of viewing the entire datasets, print out some of the data at a time.  
+
+To view the top of the dataframes, use **DataFrame.head([number of rows])** 
+**Example**  
+Input:
+```python
+df.head(5)
+```
+
+Output: 
+```
+                   A         B         C         D
+2013-01-01  0.469112 -0.282863 -1.509059 -1.135632
+2013-01-02  1.212112 -0.173215  0.119209 -1.044236
+2013-01-03 -0.861849 -2.104569 -0.494929  1.071804
+2013-01-04  0.721555 -0.706771 -1.039575  0.271860
+2013-01-05 -0.424972  0.567020  0.276232 -1.087401
+```
+[2]
+
+To view the bottom of the dataframes, use **DataFrame.tail([number of rows])**  
+**Example**  
+Input:
+```python
+df.tail(3)
+```
+
+Output:
+```
+                   A         B         C         D
+2013-01-04  0.721555 -0.706771 -1.039575  0.271860
+2013-01-05 -0.424972  0.567020  0.276232 -1.087401
+2013-01-06 -0.673690  0.113648 -1.478427  0.524988
+```
+[2]
+
+-------------------------------------------------
+### c. Reading and Writing Data  
+**pandas** provides a flexible and 
 ## References
 [1] https://pandas.pydata.org/about/index.html  
 [2] https://pandas.pydata.org/docs/user_guide/10min.html  
 [3] https://pandas.pydata.org/docs/user_guide/dsintro.html
+
