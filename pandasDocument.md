@@ -504,10 +504,18 @@ df.dropna()
 # Fill in missing values with 0 (or whatever makes sense for your data)
 df.fillna(0)
 ```
-Notabliy, "missing values propagate through arithmetic operations between pandas objects."[6]
+Notably, "missing values propagate through arithmetic operations between pandas objects."[6]
 
 ---
 
+# 3. Why pandas
+
+I chose pandas as the package for my exploration because of several reasons. First of all, pandas empowers Python, a language that I am well-versed in, with expansive and efficient data analysis and manipulation capabilities. Thus, the package allows me to leverage the ease and flexibility of Python while performing complex operations on massive datasets. For instance, using reduce() alongside pandas.merge() allows me to perform a sequence of SQL-like join operation iteratively and dynamically on data obtained from an Excel documents with over 3000 rows spread across 5 sheets. Secondly, pandas, being open-source since its early years, come with a vibrant and active communities of developers who could assist me with any issues during my learning. There are numerous online resources that come with practical examples to enhance my understanding of the package even further. Last, but not least, pandas expands my data analysis and processing skills, as its easy-to-use functionalities and straight-forward syntaxes (a trait inherited from Python) let me focus on developing efficient and fast data manipulation queries.  
+
+Through learning pandas, I come to appreciate Python's flexibility and high-level language format. I begin to approach problem in more Pythonic way, focusing on creating efficient and reusable code snippets that leverages Python's syntax and resusability.
+
+Overall, I greatly enjoyed exploring and learning more about pandas. The package empowers me with a deeper understanding of how to create good data manipulation queries. The abundance of online resources meant that I encountered little barrier why trying to learn it. I definitely recommend the package to anyone who enjoys Python and wants to increase their data analysis skillset, and will continue to use pandas extensively in the future.
+  
 
 ## References
 [1] https://pandas.pydata.org/about/index.html  
