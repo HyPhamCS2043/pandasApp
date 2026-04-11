@@ -37,7 +37,7 @@ To create a series:
   s = pd.Series(data, index=index)
 ```
 
-<ins>index</ins> refers to the name of the axis or the row, while <ins>data</ins> here can be:
+`index`refers to the name of the axis or the row, while `data` here can be:
 * "a Python dict
 
 * an ndarray
@@ -84,7 +84,7 @@ dtype: float64
 ```
 -----------------
 **Name attribute**
-**Series** also has a name attribute:
+**Series** also has a `name` attribute:
 Input:
 ```
 s = pd.Series(np.random.randn(5), name="something")
@@ -145,8 +145,8 @@ Output:
 
 ---------------------------
 DataFrames also has optional arguments to rename the labels of rows and columns:
-* index (for row labels)
-* columns (for column labels)
+* `index` (for row labels)
+* `columns` (for column labels)
 
 **Example**
 Input
@@ -214,8 +214,8 @@ c    2
 
 Instead of viewing the entire datasets, print out some of the data at a time.  
 
-To view the top of the dataframes, use **DataFrame.head([number of rows])** 
-**Example**  
+To view the top of the dataframes, use `DataFrame.head([number of rows])` 
+ 
 Input:
 ```python
 df.head(5)
@@ -232,8 +232,8 @@ Output:
 ```
 [2]
 
-To view the bottom of the dataframes, use **DataFrame.tail([number of rows])**  
-**Example**  
+To view the bottom of the dataframes, use `DataFrame.tail([number of rows])` 
+  
 Input:
 ```python
 df.tail(3)
@@ -274,7 +274,7 @@ Below is a table showing some common file reading and writing extensions in **pa
 
 Once you have initialized or loaded data into DataFrames, the next step to manipulating the data lies in **pandas's** indexing and data selection system. 
 
-In the constructor for a Series or a DataFrame, there is an optional arugment **index** that accepts a list of strings to be used as the index label for the rows. 
+In the constructor for a Series or a DataFrame, there is an optional arugment `index` that accepts a list of strings to be used as the index label for the rows. 
 ```
 s1 = pd.Series([0, 1, 2], index=["a", "b", "c"])
 ```
@@ -282,10 +282,9 @@ s1 = pd.Series([0, 1, 2], index=["a", "b", "c"])
 The first row of this Series is not labeled as "a", as oppposed to the default 0-indexing.  
 
 ----------------------------------------
-At the simplest level, **[]** can be used to select a slice out of a Series or a DataFrame.  
-Passing a label into **DataFrame[]** returns a Series or a column.  
+At the simplest level, `[]` can be used to select a slice out of a Series or a DataFrame.  
+Passing a label into `*DataFrame[]` returns a Series or a column.  
 
-**Example:**  
 
 Input  
 ```python
@@ -306,7 +305,7 @@ Freq: D, Name: A, dtype: float64
 
 
 Passing a list of column into this returns a subset of the DataFrame.  
-**Example:**  
+
 Input  
 ```
 df[["B", "A"]]
@@ -324,7 +323,7 @@ Output
 ```
 [2]
 
-Passing a slice : into DataFrame[] returns corresponding slices of rows. Notably, "when slicing, both the start bound AND the stop bound are included, if present in the index" [5]  
+Passing a slice `:` into DataFrame[] returns matching slices of rows. [5]  
 
 **Example**  
 Input:
@@ -333,19 +332,20 @@ df[0:3]
 ```
 
 Output: 
-``` 
-                   A         B         C         D
-2013-01-01  0.469112 -0.282863 -1.509059 -1.135632
-2013-01-02  1.212112 -0.173215  0.119209 -1.044236
-2013-01-03 -0.861849 -2.104569 -0.494929  1.071804
+```
+         A         B         C         D
+0     0.469112 -0.282863 -1.509059 -1.135632
+1     0.538593 -0.984943 -1.333333 -1.345355
+2     1.212112 -0.173215  0.119209 -1.044236
+3    -0.861849 -2.104569 -0.494929  1.071804
 ```
 
-[2]
 
-Outside of **[]**, two commonly used methods to select specific row are:
 
-* DataFrame.loc(): loc() is a label-based indexer that returns rows with corresponding labels.
-* DataFrame.iloc(): iloc() on the other hand returns the rows with the corresponding position within the DataFrame (0-indexed)
+Outside of `[]`, two commonly used methods to select specific row are:
+
+* `DataFrame.loc()`: loc() is a label-based indexer that returns rows with corresponding labels.
+* `DataFrame.iloc()`: iloc() on the other hand returns the rows with the corresponding integer position within the DataFrame (0-indexed)
 
 ```python
 
@@ -359,7 +359,7 @@ df.iloc[2]
 df.A
 ```
 
-Both these methods can be combined with **[]** to access specific parts of the DataFrame. For example:
+Both these methods can be combined with `[]` to access specific parts of the DataFrame. For example:
 
 ```python
 df.loc["a"]["Name"]
@@ -367,9 +367,96 @@ df.loc["a"]["Name"]
 
 will produce the data on row with index-label "a" and under column "Name".  
 
+When used with slices, `loc()` returns all elements between the lower and upper bound of the slice, inclusive.
 
+Input 
+```python
+s = pd.Series(list('abcde'), index=[0, 3, 2, 5, 4])
+
+s.loc[3:5]
+```
+
+Output
+```
+3    b
+2    c
+5    d
+dtype: str
+```
+
+With slices in iloc(), "the start bound is included, while the upper bound is excluded" [5]   
+Input   
+```
+df1.iloc[1:5, 2:4]
+```
+
+Output
+```
+          4         6
+2  0.301624 -2.179861
+4  1.462696 -1.743161
+6  1.314232  0.690579
+8  0.014871  3.357427
+```
+[5]
 
 ------------------------------------------------------
+
+### Boolean Indexing ###
+
+In pandas, passing a boolean expression into `DataFrame[]` returns a subset of the DataFrame that satisfies the expression.  
+The boolean expression or expressions (separated by operators such as `&` or `|`) are processed as boolean vectors, which is then applied to the DataFrame that calls `[]`.
+
+
+Input  
+```
+s[s["A"] > 0]
+```
+  
+Output
+```
+    A    B
+4    1   1
+5    2   0
+6    3   1
+dtype: int64
+```
+
+Input
+```
+s[(s < -1) | (s > 0.5)]
+```
+
+Output  
+```
+0   -3
+1   -2
+4    1
+5    2
+6    3
+dtype: int64
+```
+
+---
+ 
+### Merging and Combining DataFrames
+ 
+pandas supports SQL-style joins with `pd.merge()`, and stacking tables with `pd.concat()`:
+
+Input
+```python
+left  = pd.DataFrame({"key": ["a", "b"], "val_left":  [1, 2]})
+right = pd.DataFrame({"key": ["b", "c"], "val_right": [3, 4]})
+ 
+pd.merge(left, right, on="key", how="inner")
+```
+ 
+Output
+```
+  key  val_left  val_right
+0   b         2          3
+```
+
 ## References
 [1] https://pandas.pydata.org/about/index.html  
 [2] https://pandas.pydata.org/docs/user_guide/10min.html  
