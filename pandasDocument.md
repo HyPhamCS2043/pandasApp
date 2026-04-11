@@ -15,9 +15,9 @@ Then, import the package as followed at the top of your code:
 import pandas as pd
 ```
 
-# 2. Key Features, Usage, and Functionalities
+# 2. Key Features, How-To-Use, and Functionalities
 
-### a. Series and DataFrame
+## a. Series and DataFrame
 **pandas'** primary purpose is to provide developers with efficient, flexible, fast, powerful, and easy-to-use ways to analyze and manipulate a massive amount of data.   
 At the center of **pandas** is the introduction of two key classes for the handling of data: **Series** and **DataFrame** 
     
@@ -210,7 +210,7 @@ c    2
 ```
 [3]
 -------------------------------------------------
-### b. Viewing Data
+## b. Viewing Data
 
 Instead of viewing the entire datasets, print out some of the data at a time.  
 
@@ -249,7 +249,7 @@ Output:
 [2]
 
 -------------------------------------------------
-### c. Reading and Writing Data  
+## c. Reading and Writing Data  
 **pandas** provides a flexible and easy-to-use approach to the reading of data through top level readers and writers function. Regardless of file types, the syntax for the reading of data from external file into a DataFrame is 
 
     **DataFrame.read_[fileType]** 
@@ -270,7 +270,7 @@ Below is a table showing some common file reading and writing extensions in **pa
 [4]  
 ------------------------------------------------------
 
-### d. Indexing and selecting data  
+## d. Indexing and selecting data  
 
 Once you have initialized or loaded data into DataFrames, the next step to manipulating the data lies in **pandas's** indexing and data selection system. 
 
@@ -487,7 +487,7 @@ K2  A2  B2   C2   D2
 
 ---
  
-### f. Handling Missing Data
+## f. Handling Missing Data
  
 pandas uses `NaN` (Not a Number) as its standard placeholder for missing values [3].  
 
@@ -504,7 +504,7 @@ df.dropna()
 # Fill in missing values with 0 (or whatever makes sense for your data)
 df.fillna(0)
 ```
-Notabliy, "[mi]issing values propagate through arithmetic operations between pandas objects.[6]
+Notabliy, "missing values propagate through arithmetic operations between pandas objects."[6]
 
 ---
 
@@ -514,6 +514,6 @@ Notabliy, "[mi]issing values propagate through arithmetic operations between pan
 [2] https://pandas.pydata.org/docs/user_guide/10min.html  
 [3] https://pandas.pydata.org/docs/user_guide/dsintro.html  
 [4] https://pandas.pydata.org/docs/user_guide/io.html  
-[5] https://pandas.pydata.org/docs/user_guide/indexing.html
-[6] https://pandas.pydata.org/docs/user_guide/merging.html
-[7] https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html
+[5] https://pandas.pydata.org/docs/user_guide/indexing.html  
+[6] https://pandas.pydata.org/docs/user_guide/merging.html  
+[7] https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html  
