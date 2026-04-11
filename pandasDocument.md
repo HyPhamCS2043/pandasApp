@@ -439,7 +439,7 @@ dtype: int64
 
 ---
  
-### Merging and Combining DataFrames
+## e. Merging and Combining DataFrames
  
 pandas supports SQL-style joins with `pd.merge()`, and stacking tables with `pd.concat()`:
 
@@ -450,12 +450,64 @@ right = pd.DataFrame({"key": ["b", "c"], "val_right": [3, 4]})
  
 pd.merge(left, right, on="key", how="inner")
 ```
- 
 Output
 ```
   key  val_left  val_right
 0   b         2          3
 ```
+
+pandas also has `DataFrame.join()`, which allows for the merging of multiple DataFrame objects along the columns [6]
+
+Input  
+```  
+left = pd.DataFrame(
+   ....:     {"A": ["A0", "A1", "A2"], "B": ["B0", "B1", "B2"]}, index=["K0", "K1", "K2"]
+   ....: )
+   ....: 
+
+right = pd.DataFrame(
+   ....:     {"C": ["C0", "C2", "C3"], "D": ["D0", "D2", "D3"]}, index=["K0", "K2", "K3"]
+   ....: )
+   ....: 
+
+result = left.join(right)
+
+result
+```
+
+Output  
+```
+Out[86]: 
+     A   B    C    D
+K0  A0  B0   C0   D0
+K1  A1  B1  NaN  NaN
+K2  A2  B2   C2   D2
+```
+
+
+---
+ 
+### f. Handling Missing Data
+ 
+pandas uses `NaN` (Not a Number) as its standard placeholder for missing values [3].  
+
+The package provides a host of useful functions that let users work with datasets that come with missing data. 
+
+For example:   
+```python
+# See where values are missing
+pd.isna(df)
+ 
+# Drop any row that has at least one missing value
+df.dropna()
+ 
+# Fill in missing values with 0 (or whatever makes sense for your data)
+df.fillna(0)
+```
+Notabliy, "[mi]issing values propagate through arithmetic operations between pandas objects.[6]
+
+---
+
 
 ## References
 [1] https://pandas.pydata.org/about/index.html  
@@ -463,4 +515,5 @@ Output
 [3] https://pandas.pydata.org/docs/user_guide/dsintro.html  
 [4] https://pandas.pydata.org/docs/user_guide/io.html  
 [5] https://pandas.pydata.org/docs/user_guide/indexing.html
-
+[6] https://pandas.pydata.org/docs/user_guide/merging.html
+[7] https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html
