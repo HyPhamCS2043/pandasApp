@@ -72,7 +72,7 @@ def viewSpecificStatsMenu(name):
     choice = input()
     print("\n------------------------------------------------------------")
     print("\n")
-    while choice != 7:
+    while choice != "7":
         match choice:
             case "1":
                 print("Ability Scores:\n")
